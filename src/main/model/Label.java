@@ -9,33 +9,25 @@ import java.io.IOException;
 // Represents a label with all values and an image of it
 public class Label {
     public static final String PATH_TEMPLATE = "./data/LabelTemplate.jpg";
-
     public static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 70);
     public static final Font FONT_MANUFACTURER = new Font("Arial", Font.BOLD, 50);
     public static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 40);
 
-    private final String manufacturer;
+    private static final String manufacturer = "Oasis Windows (Canada) Inc.";
+
     private final String description;
-    private final double uFactor;
+    private double uFactor;
     private final double shgc;
     private final double er;
     private final double vt;
-    private final BufferedImage image;
 
     // EFFECTS: Constructs a label with the given details and assigns its image to it
-    public Label(String manufacturer, String description, double uFactor, double shgc, double er, double vt)
-            throws IOException {
-        this.manufacturer = manufacturer;
+    public Label(String description, double uFactor, double shgc, double er, double vt) {
         this.description = description;
         this.uFactor = uFactor;
         this.shgc = shgc;
         this.er = er;
         this.vt = vt;
-        image = generateImage();
-    }
-
-    public String getManufacturer() {
-        return manufacturer;
     }
 
     public String getDescription() {
@@ -58,8 +50,8 @@ public class Label {
         return vt;
     }
 
-    public BufferedImage getImage() {
-        return image;
+    public void setUFactor(double value) {
+        uFactor = value;
     }
 
     // EFFECTS: generates an image of the label with its details and returns it;
@@ -79,7 +71,7 @@ public class Label {
         g.drawString(String.valueOf(getVt()), 770, 770);
 
         g.setFont(FONT_MANUFACTURER);
-        g.drawString(getManufacturer(), 230, 860);
+        g.drawString(manufacturer, 230, 860);
 
         g.setFont(FONT_DESCRIPTION);
         int y = 930;

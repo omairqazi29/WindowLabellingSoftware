@@ -2,56 +2,55 @@ package main.ui;
 
 import main.ui.menu.GenerateLabelMenu;
 
-import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
-public class WindowLabellingSoftware {
+public class WindowLabellingSoftware extends JFrame implements ActionListener {
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
 
     // EFFECTS: constructs the UI and runs the app
     public WindowLabellingSoftware() {
-        runApp();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(WIDTH, HEIGHT);
+
+        add(mainPanel(), BorderLayout.CENTER);
+
+        setVisible(true);
     }
 
-    // EFFECTS: Initializes and displays the main options
-    private void runApp() {
-        boolean quit = false;
-        String option;
-        Scanner input = new Scanner(System.in);
+    // EFFECTS: creates and returns the main menu JPanel
+    private JPanel mainPanel() {
+        JPanel mainPanel = new JPanel(new GridLayout(2, 1));
+        JButton generateButton = createButton("Generate Label", "genLabel");
+        JButton quitButton = createButton("Quit", "quit");
+        mainPanel.add(generateButton);
+        mainPanel.add(quitButton);
+        return mainPanel;
+    }
 
-        while (!quit) {
-            displayMenu();
-            option = input.next().toLowerCase();
+    // EFFECTS: creates and returns the JButton with given text and command
+    private JButton createButton(String buttonText, String actionCommand) {
+        JButton button = new JButton(buttonText);
+        button.setActionCommand(actionCommand);
+        button.addActionListener(this);
+        return button;
+    }
 
-            if (option.equals("q")) {
-                quit = true;
-            } else {
-                selectOption(option);
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if ("genLabel".equals(e.getActionCommand())) {
+            try {
+                new GenerateLabelMenu(this);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
             }
-        }
-
-        System.out.println("Thank you for using Window Labelling Software :)\nHave a nice day, bye for now!");
-    }
-
-    // EFFECTS: displays the options (or features/functionality)
-    private void displayMenu() {
-        System.out.println("\nSelect from:");
-        System.out.println("\tg -> generate label");
-        System.out.println("\tq -> quit");
-    }
-
-    // EFFECTS: selects and runs the appropriate menu
-    private void selectOption(String option) {
-        try {
-            switch (option) {
-                case "g":
-                    new GenerateLabelMenu();
-                    break;
-                default:
-                    System.out.println("Invalid option specified\nPlease enter a valid option");
-                    break;
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            runApp();
+        } else {
+            dispose();
+            System.exit(0);
         }
     }
 }
