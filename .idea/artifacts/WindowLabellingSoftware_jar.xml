@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="WindowLabellingSoftware:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/WindowLabellingSoftware_jar</output-path>
-    <root id="archive" name="WindowLabellingSoftware.jar">
-      <element id="module-output" name="WindowLabellingSoftware" />
-    </root>
-  </artifact>
-</component>

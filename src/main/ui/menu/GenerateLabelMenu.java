@@ -1,14 +1,15 @@
 package main.ui.menu;
 
 import main.model.Label;
+import main.utils.CSVManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
+import java.awt.image.BufferedImage;
+import java.awt.print.*;
 import java.io.IOException;
+import java.util.List;
 
 // Represents a menu for generating label
 public class GenerateLabelMenu extends Menu {
@@ -40,38 +41,24 @@ public class GenerateLabelMenu extends Menu {
         seriesDropDown.addItemListener(e -> {
             windowDropDown.removeAllItems();
             glassDropDown.removeAllItems();
+            CSVManager csvManager = CSVManager.getInstance();
 
             String selectedValue = (String) seriesDropDown.getSelectedItem();
-            if (selectedValue.equals("300 Series")) {
-                windowOptions = new String[]{"Sliding Window", "Vertical Sliding Window", "Picture Window"};
-            } else if (selectedValue.equals("5000 Series")) {
-                windowOptions = new String[]{"Casement Window", "Awning Window", "Picture Window",
-                        "Balanced Sash Picture Window"};
-            } else {
-                windowOptions = new String[]{"Sliding Patio Door"};
-            }
-
-            for (String windowType : windowOptions) {
-                windowDropDown.addItem(windowType);
+            List<String> windowTypes = csvManager.getWindowType(selectedValue);
+            for (String window : windowTypes) {
+                windowDropDown.addItem(window);
             }
         });
 
         windowDropDown.addItemListener(e -> {
             glassDropDown.removeAllItems();
+            String series = (String) seriesDropDown.getSelectedItem();
+            CSVManager csvManager = CSVManager.getInstance();
 
             String selectedValue = (String) windowDropDown.getSelectedItem();
-            if (selectedValue!=null) {
-                if (selectedValue.equals("Sliding Window")) {
-                    glassOptions = new String[]{"Sliding Window Option A"};
-                } else if (selectedValue.equals("Picture Window")) {
-                    glassOptions = new String[]{"Picture Window Option A", "Option B"};
-                } else {
-                    glassOptions = new String[]{"Option Casement"};
-                }
-
-                for (String glassOption : glassOptions) {
-                    glassDropDown.addItem(glassOption);
-                }
+            List<String> glassOptions = csvManager.getGlassOption(series, selectedValue);
+            for (String glass : glassOptions) {
+                glassDropDown.addItem(glass);
             }
         });
     }
@@ -84,23 +71,48 @@ public class GenerateLabelMenu extends Menu {
         JButton generateButton = createButton("Generate Label", "genLabel");
         JButton backButton = createButton("Back", "back");
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.add(seriesLabel);
-        mainPanel.add(seriesDropDown);
-        mainPanel.add(windowLabel);
-        mainPanel.add(windowDropDown);
-        mainPanel.add(glassLabel);
-        mainPanel.add(glassDropDown);
-        mainPanel.add(generateButton);
-        mainPanel.add(backButton);
-
         vancouver.setActionCommand("vancouver");
         vancouver.addActionListener(this);
         uFactorLabel.setVisible(false);
         uFactorField.setVisible(false);
-        mainPanel.add(vancouver);
-        mainPanel.add(uFactorLabel);
-        mainPanel.add(uFactorField);
+
+        // Create layout and add components to main panel
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        mainPanel.add(seriesLabel, gbc);
+        gbc.gridx++;
+        mainPanel.add(seriesDropDown, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        mainPanel.add(windowLabel, gbc);
+        gbc.gridx++;
+        mainPanel.add(windowDropDown, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        mainPanel.add(glassLabel, gbc);
+        gbc.gridx++;
+        mainPanel.add(glassDropDown, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        mainPanel.add(vancouver, gbc);
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        mainPanel.add(uFactorLabel, gbc);
+        gbc.gridx++;
+        mainPanel.add(uFactorField, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        mainPanel.add(generateButton, gbc);
+        gbc.gridx++;
+        mainPanel.add(backButton, gbc);
+
         return mainPanel;
     }
 
@@ -115,14 +127,15 @@ public class GenerateLabelMenu extends Menu {
     // EFFECTS: asks details and generates the image of the label accordingly and returns it;
     // throws IOException if error occurs while reading or writing image
     private void runMenu() throws IOException {
+        String series = (String) seriesDropDown.getSelectedItem();
         String windowType = (String) windowDropDown.getSelectedItem();
         String glassOption = (String) glassDropDown.getSelectedItem();
+        String model = CSVManager.getInstance().getModelCode(series, windowType, glassOption);
+        List<Double> ratings = CSVManager.getInstance().getRatings(series, windowType, glassOption);
+        String report = CSVManager.getInstance().getReport(series, windowType, glassOption);
 
-        if (windowType.equals("Sliding Window") && glassOption.equals("Sliding Window Option A")) {
-            label = new Label("5000 Series Casement Window\n" + "OASW-CA-3,270(2)-3,Clear\n" +
-                    "Report: T636-65 (Issued November 20, 2020)",
-                    1.47, 0.24, 22, 0.44);
-        }
+        label = new Label(series + " " + windowType + "\n" + model + "\n" + report,
+                ratings.get(0), ratings.get(1), ratings.get(2), ratings.get(3));
 
         if (vancouver.isSelected()) {
             String uFactorText = uFactorField.getText();
@@ -135,25 +148,52 @@ public class GenerateLabelMenu extends Menu {
 
         try {
             PrinterJob printJob = PrinterJob.getPrinterJob();
-            printJob.setPrintable((graphics, pageFormat, pageIndex) -> {
+
+            // Create a PageFormat object with the desired paper size
+            PageFormat pageFormat = printJob.defaultPage();
+            Paper paper = pageFormat.getPaper();
+
+            // Adjust paper size to image size
+            BufferedImage image = label.generateImage();
+            double paperWidth = image.getWidth();
+            double paperHeight = image.getHeight();
+
+            // Create a margin (in points)
+            double margin = 10;
+
+            // Set paper size and imageable area accounting for margins
+            paper.setSize(paperWidth, paperHeight);
+            paper.setImageableArea(margin, margin, paperWidth - margin, paperHeight - 2*margin);
+            pageFormat.setPaper(paper);
+
+            printJob.setPrintable((graphics, pf, pageIndex) -> {
                 if (pageIndex != 0) {
                     return Printable.NO_SUCH_PAGE;
                 }
-                try {
-                    graphics.drawImage(label.generateImage(), 0, 0,
-                            (int) pageFormat.getImageableWidth(), (int) pageFormat.getImageableHeight(),
-                            null);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                double imageWidth = image.getWidth();
+                double imageHeight = image.getHeight();
+
+                double scaleX = (pf.getImageableWidth() - 2 * margin) / imageWidth;
+                double scaleY = (pf.getImageableHeight() - 2 * margin) / imageHeight;
+                double scale = Math.min(scaleX, scaleY);
+
+                int scaledWidth = (int) (imageWidth * scale);
+                int scaledHeight = (int) (imageHeight * scale);
+
+                int x = (int) ((pf.getImageableWidth() - scaledWidth) / 2);
+                int y = (int) ((pf.getImageableHeight() - scaledHeight) / 2);
+
+                graphics.drawImage(image, x, y, scaledWidth, scaledHeight, null);
                 return Printable.PAGE_EXISTS;
             });
+
             if (printJob.printDialog()) {
                 printJob.print();
             }
         } catch (PrinterException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     @Override

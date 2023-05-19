@@ -8,12 +8,9 @@ import java.io.IOException;
 
 // Represents a label with all values and an image of it
 public class Label {
-    public static final String PATH_TEMPLATE = "./data/LabelTemplate.jpg";
+    public static final String PATH_TEMPLATE = "./data/LabelTemplate.jpeg";
     public static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 70);
-    public static final Font FONT_MANUFACTURER = new Font("Arial", Font.BOLD, 50);
     public static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 40);
-
-    private static final String manufacturer = "Oasis Windows (Canada) Inc.";
 
     private final String description;
     private double uFactor;
@@ -65,20 +62,23 @@ public class Label {
 
         g.setFont(FONT_VALUES);
         g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(getUFactor()), 220, 610);
-        g.drawString(String.valueOf(getShgc()), 770, 610);
-        g.drawString(String.valueOf(getEr()), 220, 770);
-        g.drawString(String.valueOf(getVt()), 770, 770);
-
-        g.setFont(FONT_MANUFACTURER);
-        g.drawString(manufacturer, 230, 860);
+        g.drawString(String.valueOf(getUFactor()), 190, 870);
+        g.drawString(String.valueOf(getShgc()), 650, 870);
+        g.drawString(String.valueOf(getEr()), 190, 1020);
+        g.drawString(String.valueOf(getVt()), 650, 1020);
 
         g.setFont(FONT_DESCRIPTION);
-        int y = 930;
+        int y = 1170;
         String[] lines = getDescription().split("\n");
-        g.drawString(lines[0], 280, y);
-        g.drawString(lines[1], 290, y += g.getFontMetrics().getHeight());
-        g.drawString(lines[2], 200, y += g.getFontMetrics().getHeight());
+        int totalHeight = lines.length * g.getFontMetrics().getHeight();
+        int startY = y - (totalHeight / 2);
+        for (String line : lines) {
+            int lineWidth = g.getFontMetrics().stringWidth(line);
+            int x = (280 + (400 - lineWidth) / 2);
+
+            g.drawString(line, x, startY);
+            startY += g.getFontMetrics().getHeight();
+        }
 
         g.dispose();
         return label;
