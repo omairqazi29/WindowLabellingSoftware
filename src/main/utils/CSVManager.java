@@ -30,6 +30,7 @@ public class CSVManager {
         }
     }
 
+    // EFFECTS: creates a CSVManager
     public static CSVManager getInstance() {
         if (singleton == null) {
             singleton = new CSVManager();
