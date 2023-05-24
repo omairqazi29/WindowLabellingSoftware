@@ -56,6 +56,18 @@ public class CSVManager {
         return Collections.unmodifiableList(windowTypes);
     }
 
+    public List<String> getPerformanceType(String forSeries) {
+        List<String> performanceTypes = new ArrayList<>();
+        for (String[] record : performanceRecords.subList(1, performanceRecords.size())) {
+            String series = record[0];
+            String window = record[1];
+            if (series.equals(forSeries) && !performanceTypes.contains(window)) {
+                performanceTypes.add(window);
+            }
+        }
+        return Collections.unmodifiableList(performanceTypes);
+    }
+
     public List<String> getGlassOption(String series, String window) {
         List<String> glassOptions = new ArrayList<>();
         for (String[] record : records.subList(1, records.size())) {
@@ -84,13 +96,13 @@ public class CSVManager {
         String performance = "";
         for (String[] record : performanceRecords.subList(1, performanceRecords.size())) {
             if (record[0].equals(series) && record[1].equals(window)) {
-                performance += record[2] + "\t\t–\t\t" + record[3] + "\n";
-                performance += record[4] + "\n";
-                performance += "Positive Design Pressure (DP):\t\t\t" + record[5] + "\n";
-                performance += "Negative Design Pressure (DP):\t\t\t" + record[6] + "\n";
-                performance += "Water Penetration Resistance Test Pressure:\t\t\t" + record[7] + "\n";
-                performance += "Canadian Air Filtration/Exfiltration:\t\t\t" + record[8] + "\n";
-                performance += "Report:\t\t\t" + record[9];
+                performance += record[2] + "  –  " + record[3] + "\n";
+                performance += "Size tested:   " + record[4] + "\n";
+                performance += "Positive Design Pressure (DP):   " + record[5] + "\n";
+                performance += "Negative Design Pressure (DP):   " + record[6] + "\n";
+                performance += "Water Penetration Resistance Test Pressure:   " + record[7] + "\n";
+                performance += "Canadian Air Filtration/Exfiltration:   " + record[8] + "\n";
+                performance += "Report:   " + record[9];
                 break;
             }
         }

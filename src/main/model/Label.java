@@ -8,14 +8,14 @@ import java.io.IOException;
 
 // Represents a label with all values and an image of it
 public class Label {
-    private static final String PATH_TEMPLATE = "./data/LabelTemplate.jpeg";
+    private static final String PATH_TEMPLATE = "./data/LabelTemplate.jpg";
     private static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 70);
     private static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 40);
     private static final Font FONT_PERFORMANCE = new Font("Arial", Font.PLAIN, 35);
     private static final String PERFORMANCE = "AAMA/WDMA/CSA 101/I.S.2/CSA A440-11 NAFS\n";
 
     private final String description;
-    private double uFactor;
+    private final double uFactor;
     private final double shgc;
     private final double er;
     private final double vt;
@@ -51,10 +51,6 @@ public class Label {
         return vt;
     }
 
-    public void setUFactor(double value) {
-        uFactor = value;
-    }
-
     public String getPerformance() {
         return performance;
     }
@@ -70,7 +66,8 @@ public class Label {
 
         g.setFont(FONT_VALUES);
         g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(getUFactor()), 190, 870);
+        g.drawString(String.valueOf(Math.round((getUFactor() / 5.678) * 100.0) / 100.0), 60, 870);
+        g.drawString(String.valueOf(getUFactor()), 300, 870);
         g.drawString(String.valueOf(getShgc()), 650, 870);
         g.drawString(String.valueOf(getEr()), 190, 1020);
         g.drawString(String.valueOf(getVt()), 650, 1020);

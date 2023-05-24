@@ -1,2 +1,9 @@
 series;window type;class;pg;size;pdp;ndp;wprtp;cafe;report
-300 Series;Picture Window;Class LC;PG2400 (metric);Size tested 2705 x 2094 mm – Fixed Window (Type FW);2400 Pa;-2400 Pa;510 Pa;Fixed Level;T636-30 (Issued March 4, 2015)
+300 Series;Sliding Window;Class LC;PG2640 (metric);1800 x 1420 mm (Type HS);2640 Pa;-2640 Pa;510 Pa;A3 Level;T636-15 (Issued February 6, 2014)
+300 Series;Vertical Sliding Window;Class LC;PG1680 (metric);1181 x 3098 mm (Type H);2400 Pa;-2400 Pa;260 Pa;A3 Level;T636-28 (Issued March 4, 2015)
+300 Series;Picture Window;Class LC;PG2400 (metric);2705 x 2094 mm (Type FW);2400 Pa;-2400 Pa;510 Pa;Fixed Level;T636-30 (Issued March 4, 2015)
+5000 Series;Casement Window - Roto;Class CW;PG3600 (metric):;800 x 1600 mm (Type C);3600 Pa;-3600 Pa;730 Pa;A3 Level;T636-5 (Issued June 30, 2010)
+5000 Series;Casement Window - Push-out;Class CW;PG2640 (metric);800 x 1600 mm (Type C);2640 Pa;-2640 Pa;730 Pa;A3 Level;T636-6 (Issued June 30, 2010)
+5000 Series;Picture Window;Class LC;PG1440 (SI);2705 x 2094 mm - (Type FW);1440 Pa;-1440 Pa;720 Pa;Fixed Level;T636-29 (Issued May 12, 2015)
+5000 Series;Awning Window - Roto;Class CW;PG2640 (metric);1200 x 1000 mm (Type AP);2640 Pa;-2640 Pa;730 Pa;A3 Level;T636-7 (Issued June 30, 2010)
+5000 Series;Awning Window - Push-out;Class CW;PG2160 (metric);1200 x 1000 mm (Type AP);2160 Pa;-2160 Pa;730 Pa;A3 Level;T636-8 (Issued June 30, 2010)

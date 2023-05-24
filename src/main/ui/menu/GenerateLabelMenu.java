@@ -16,9 +16,11 @@ public class GenerateLabelMenu extends Menu {
     private final String[] seriesOptions = {"Select a Series", "300 Series", "5000 Series", "Nova Sliding Patio Door"};
     private final String[] windowOptions = {"Please select a Series"};
     private final String[] glassOptions = {"Please select a Window Type"};
+    private final String[] performanceOptions = {"Please select a Series"};
     private final JComboBox<String> seriesDropDown = new JComboBox<>(seriesOptions);
     private final JComboBox<String> windowDropDown = new JComboBox<>(windowOptions);
     private final JComboBox<String> glassDropDown = new JComboBox<>(glassOptions);
+    private final JComboBox<String> performanceDropDown = new JComboBox<>(performanceOptions);
 
     // EFFECTS: constructs a menu with generate label name;
     // throws IOException if error occurs in file operations
@@ -37,12 +39,17 @@ public class GenerateLabelMenu extends Menu {
         seriesDropDown.addItemListener(e -> {
             windowDropDown.removeAllItems();
             glassDropDown.removeAllItems();
+            performanceDropDown.removeAllItems();
             CSVManager csvManager = CSVManager.getInstance();
 
             String selectedValue = (String) seriesDropDown.getSelectedItem();
             List<String> windowTypes = csvManager.getWindowType(selectedValue);
             for (String window : windowTypes) {
                 windowDropDown.addItem(window);
+            }
+            List<String> performanceTypes = csvManager.getPerformanceType(selectedValue);
+            for (String window : performanceTypes) {
+                performanceDropDown.addItem(window);
             }
         });
 
@@ -64,6 +71,7 @@ public class GenerateLabelMenu extends Menu {
         JLabel seriesLabel = new JLabel("Series:");
         JLabel windowLabel = new JLabel("Window Type:");
         JLabel glassLabel = new JLabel("Glass Option:");
+        JLabel performanceLabel = new JLabel("Performance for Window: ");
         JButton generateButton = createButton("Generate Label", "genLabel");
         JButton backButton = createButton("Back", "back");
 
@@ -89,6 +97,11 @@ public class GenerateLabelMenu extends Menu {
         mainPanel.add(glassDropDown, gbc);
         gbc.gridx = 0;
         gbc.gridy++;
+        mainPanel.add(performanceLabel, gbc);
+        gbc.gridx++;
+        mainPanel.add(performanceDropDown, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(generateButton, gbc);
@@ -112,10 +125,11 @@ public class GenerateLabelMenu extends Menu {
         String series = (String) seriesDropDown.getSelectedItem();
         String windowType = (String) windowDropDown.getSelectedItem();
         String glassOption = (String) glassDropDown.getSelectedItem();
+        String performanceWindow = (String) performanceDropDown.getSelectedItem();
         String model = CSVManager.getInstance().getModelCode(series, windowType, glassOption);
         List<Double> ratings = CSVManager.getInstance().getRatings(series, windowType, glassOption);
         String report = CSVManager.getInstance().getReport(series, windowType, glassOption);
-        String performance = CSVManager.getInstance().getPerformanceRatings(series, windowType);
+        String performance = CSVManager.getInstance().getPerformanceRatings(series, performanceWindow);
 
         Label label = new Label(series + " " + windowType + "\n" + model + "\n" + report,
                 ratings.get(0), ratings.get(1), ratings.get(2), ratings.get(3), performance);
