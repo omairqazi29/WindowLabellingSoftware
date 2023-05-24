@@ -8,23 +8,27 @@ import java.io.IOException;
 
 // Represents a label with all values and an image of it
 public class Label {
-    public static final String PATH_TEMPLATE = "./data/LabelTemplate.jpeg";
-    public static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 70);
-    public static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 40);
+    private static final String PATH_TEMPLATE = "./data/LabelTemplate.jpeg";
+    private static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 70);
+    private static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 40);
+    private static final Font FONT_PERFORMANCE = new Font("Arial", Font.PLAIN, 35);
+    private static final String PERFORMANCE = "AAMA/WDMA/CSA 101/I.S.2/CSA A440-11 NAFS\n";
 
     private final String description;
     private double uFactor;
     private final double shgc;
     private final double er;
     private final double vt;
+    private final String performance;
 
     // EFFECTS: Constructs a label with the given details and assigns its image to it
-    public Label(String description, double uFactor, double shgc, double er, double vt) {
+    public Label(String description, double uFactor, double shgc, double er, double vt, String performance) {
         this.description = description;
         this.uFactor = uFactor;
         this.shgc = shgc;
         this.er = er;
         this.vt = vt;
+        this.performance = PERFORMANCE + performance;
     }
 
     public String getDescription() {
@@ -49,6 +53,10 @@ public class Label {
 
     public void setUFactor(double value) {
         uFactor = value;
+    }
+
+    public String getPerformance() {
+        return performance;
     }
 
     // EFFECTS: generates an image of the label with its details and returns it;
@@ -78,6 +86,19 @@ public class Label {
 
             g.drawString(line, x, startY);
             startY += g.getFontMetrics().getHeight();
+        }
+
+        g.setFont(FONT_PERFORMANCE);
+        int performanceY = 1830;
+        String[] performance = getPerformance().split("\n");
+        int totalPerformanceHeight = performance.length * g.getFontMetrics().getHeight();
+        int startPerformanceY = performanceY - (totalPerformanceHeight / 2);
+        for (String line : performance) {
+            int lineWidth = g.getFontMetrics().stringWidth(line);
+            int x = (280 + (400 - lineWidth) / 2);
+
+            g.drawString(line, x, startPerformanceY);
+            startPerformanceY += g.getFontMetrics().getHeight();
         }
 
         g.dispose();

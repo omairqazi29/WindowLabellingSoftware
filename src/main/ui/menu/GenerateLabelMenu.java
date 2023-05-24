@@ -14,15 +14,11 @@ import java.util.List;
 // Represents a menu for generating label
 public class GenerateLabelMenu extends Menu {
     private final String[] seriesOptions = {"Select a Series", "300 Series", "5000 Series", "Nova Sliding Patio Door"};
-    private String[] windowOptions = {"Please select a Series"};
-    private String[] glassOptions = {"Please select a Window Type"};
+    private final String[] windowOptions = {"Please select a Series"};
+    private final String[] glassOptions = {"Please select a Window Type"};
     private final JComboBox<String> seriesDropDown = new JComboBox<>(seriesOptions);
     private final JComboBox<String> windowDropDown = new JComboBox<>(windowOptions);
     private final JComboBox<String> glassDropDown = new JComboBox<>(glassOptions);
-    private final JCheckBox vancouver = new JCheckBox("Vancouver order?");
-    private Label label = null;
-    private final JLabel uFactorLabel = new JLabel("uFactor Value:");
-    private final JTextField uFactorField = new JTextField(10);
 
     // EFFECTS: constructs a menu with generate label name;
     // throws IOException if error occurs in file operations
@@ -71,11 +67,6 @@ public class GenerateLabelMenu extends Menu {
         JButton generateButton = createButton("Generate Label", "genLabel");
         JButton backButton = createButton("Back", "back");
 
-        vancouver.setActionCommand("vancouver");
-        vancouver.addActionListener(this);
-        uFactorLabel.setVisible(false);
-        uFactorField.setVisible(false);
-
         // Create layout and add components to main panel
         JPanel mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -96,15 +87,6 @@ public class GenerateLabelMenu extends Menu {
         mainPanel.add(glassLabel, gbc);
         gbc.gridx++;
         mainPanel.add(glassDropDown, gbc);
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.gridwidth = 2;
-        mainPanel.add(vancouver, gbc);
-        gbc.gridy++;
-        gbc.gridwidth = 1;
-        mainPanel.add(uFactorLabel, gbc);
-        gbc.gridx++;
-        mainPanel.add(uFactorField, gbc);
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 1;
@@ -133,19 +115,10 @@ public class GenerateLabelMenu extends Menu {
         String model = CSVManager.getInstance().getModelCode(series, windowType, glassOption);
         List<Double> ratings = CSVManager.getInstance().getRatings(series, windowType, glassOption);
         String report = CSVManager.getInstance().getReport(series, windowType, glassOption);
+        String performance = CSVManager.getInstance().getPerformanceRatings(series, windowType);
 
-        label = new Label(series + " " + windowType + "\n" + model + "\n" + report,
-                ratings.get(0), ratings.get(1), ratings.get(2), ratings.get(3));
-
-        if (vancouver.isSelected()) {
-            String uFactorText = uFactorField.getText();
-            if (uFactorText.isEmpty()) {
-                label.setUFactor(0);
-            } else {
-                label.setUFactor(Double.parseDouble(uFactorField.getText()));
-            }
-        }
-
+        Label label = new Label(series + " " + windowType + "\n" + model + "\n" + report,
+                ratings.get(0), ratings.get(1), ratings.get(2), ratings.get(3), performance);
         try {
             PrinterJob printJob = PrinterJob.getPrinterJob();
 
@@ -203,14 +176,6 @@ public class GenerateLabelMenu extends Menu {
                 runMenu();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
-            }
-        } else if ("vancouver".equals(e.getActionCommand())) {
-            if (vancouver.isSelected()) {
-                uFactorLabel.setVisible(true);
-                uFactorField.setVisible(true);
-            } else {
-                uFactorLabel.setVisible(false);
-                uFactorField.setVisible(false);
             }
         } else {
             setVisible(false);

@@ -15,15 +15,21 @@ import java.util.List;
 public class CSVManager {
     private static CSVManager singleton = null;
     private static final char DELIMITER = ';';
-    private static final String pathName = "./data/thermalData.csv";
+    private static final String PATH = "./data/thermalData.csv";
+    private static final String PERFORMANCE_PATH = "./data/performanceData.csv";
 
     private static List<String[]> records = new ArrayList<>();
+    private static List<String[]> performanceRecords = new ArrayList<>();
 
     private CSVManager() {
         CSVParser parser = new CSVParserBuilder().withSeparator(DELIMITER).build();
+        CSVReader reader;
         try {
-            CSVReader reader = new CSVReaderBuilder(new FileReader(pathName)).withCSVParser(parser).build();
+            reader = new CSVReaderBuilder(new FileReader(PATH)).withCSVParser(parser).build();
             records = reader.readAll();
+            reader.close();
+            reader = new CSVReaderBuilder(new FileReader(PERFORMANCE_PATH)).withCSVParser(parser).build();
+            performanceRecords = reader.readAll();
             reader.close();
         } catch (IOException | CsvException e) {
             throw new RuntimeException(e);
@@ -72,6 +78,23 @@ public class CSVManager {
             }
         }
         return ratings;
+    }
+
+    public String getPerformanceRatings(String series, String window) {
+        String performance = "";
+        for (String[] record : performanceRecords.subList(1, performanceRecords.size())) {
+            if (record[0].equals(series) && record[1].equals(window)) {
+                performance += record[2] + "\t\t–\t\t" + record[3] + "\n";
+                performance += record[4] + "\n";
+                performance += "Positive Design Pressure (DP):\t\t\t" + record[5] + "\n";
+                performance += "Negative Design Pressure (DP):\t\t\t" + record[6] + "\n";
+                performance += "Water Penetration Resistance Test Pressure:\t\t\t" + record[7] + "\n";
+                performance += "Canadian Air Filtration/Exfiltration:\t\t\t" + record[8] + "\n";
+                performance += "Report:\t\t\t" + record[9];
+                break;
+            }
+        }
+        return performance;
     }
 
     public String getModelCode(String series, String window, String glass) {
