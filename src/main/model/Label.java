@@ -8,7 +8,8 @@ import java.io.IOException;
 
 // Represents a label with all values and an image of it
 public class Label {
-    private static final String PATH_TEMPLATE = "./data/LabelTemplate.jpg";
+    private static final String NRCAN_TEMPLATE = "./data/LabelTemplate.jpg";
+    private static final String OASIS_TEMPLATE = "./data/OasisTemplate.jpg";
     private static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 70);
     private static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 40);
     private static final Font FONT_PERFORMANCE = new Font("Arial", Font.PLAIN, 35);
@@ -20,15 +21,17 @@ public class Label {
     private final double er;
     private final double vt;
     private final String performance;
+    private final boolean nrCan;
 
     // EFFECTS: Constructs a label with the given details and assigns its image to it
-    public Label(String description, double uFactor, double shgc, double er, double vt, String performance) {
-        this.description = description;
-        this.uFactor = uFactor;
+    public Label(String desc, double uVal, double shgc, double er, double vt, String perf, boolean nrCan) {
+        this.description = desc;
+        this.uFactor = uVal;
         this.shgc = shgc;
         this.er = er;
         this.vt = vt;
-        this.performance = PERFORMANCE + performance;
+        this.performance = PERFORMANCE + perf;
+        this.nrCan = nrCan;
     }
 
     public String getDescription() {
@@ -58,16 +61,20 @@ public class Label {
     // EFFECTS: generates an image of the label with its details and returns it;
     // throws IOException if error occurs while handling file operations
     public BufferedImage generateImage() throws IOException {
-        BufferedImage template = ImageIO.read(new File(PATH_TEMPLATE));
-
+        BufferedImage template;
+        if (nrCan) {
+            template = ImageIO.read(new File(NRCAN_TEMPLATE));
+        } else {
+            template = ImageIO.read(new File(OASIS_TEMPLATE));
+        }
         BufferedImage label = new BufferedImage(template.getWidth(), template.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = label.createGraphics();
         g.drawImage(template, null, 0, 0);
 
         g.setFont(FONT_VALUES);
         g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(Math.round((getUFactor() / 5.678) * 100.0) / 100.0), 60, 870);
-        g.drawString(String.valueOf(getUFactor()), 300, 870);
+        g.drawString(String.valueOf(Math.round((getUFactor() / 5.678) * 100.0) / 100.0), 300, 870);
+        g.drawString(String.valueOf(getUFactor()), 60, 870);
         g.drawString(String.valueOf(getShgc()), 650, 870);
         g.drawString(String.valueOf(getEr()), 190, 1020);
         g.drawString(String.valueOf(getVt()), 650, 1020);

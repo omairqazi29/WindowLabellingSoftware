@@ -17,9 +17,11 @@ public class CSVManager {
     private static final char DELIMITER = ';';
     private static final String PATH = "./data/thermalData.csv";
     private static final String PERFORMANCE_PATH = "./data/performanceData.csv";
+    private static final String NRCAN_PATH = "./data/NRCanData.csv";
 
     private static List<String[]> records = new ArrayList<>();
     private static List<String[]> performanceRecords = new ArrayList<>();
+    private static List<String[]> nrCanRecords = new ArrayList<>();
 
     private CSVManager() {
         CSVParser parser = new CSVParserBuilder().withSeparator(DELIMITER).build();
@@ -30,6 +32,10 @@ public class CSVManager {
             reader.close();
             reader = new CSVReaderBuilder(new FileReader(PERFORMANCE_PATH)).withCSVParser(parser).build();
             performanceRecords = reader.readAll();
+            reader.close();
+            parser = new CSVParserBuilder().withSeparator(',').build();
+            reader = new CSVReaderBuilder(new FileReader(NRCAN_PATH)).withCSVParser(parser).build();
+            nrCanRecords = reader.readAll();
             reader.close();
         } catch (IOException | CsvException e) {
             throw new RuntimeException(e);
@@ -129,5 +135,17 @@ public class CSVManager {
             }
         }
         return report;
+    }
+
+    public boolean isNRCan(String model) {
+        boolean nrCan = false;
+        String code = model.substring(model.indexOf('-')+1).toLowerCase();
+        for (String[] record : nrCanRecords.subList(1, nrCanRecords.size())) {
+            if (record[0].toLowerCase().contains(code)) {
+                nrCan = true;
+                break;
+            }
+        }
+        return nrCan;
     }
 }
