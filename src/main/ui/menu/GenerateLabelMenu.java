@@ -22,6 +22,8 @@ public class GenerateLabelMenu extends Menu {
     private final JComboBox<String> glassDropDown = new JComboBox<>(glassOptions);
     private final JComboBox<String> performanceDropDown = new JComboBox<>(performanceOptions);
 
+    private final CSVManager csvManager = CSVManager.getInstance();
+
     // EFFECTS: constructs a menu with generate label name;
     // throws IOException if error occurs in file operations
     public GenerateLabelMenu(JFrame parentFrame) throws IOException {
@@ -40,7 +42,6 @@ public class GenerateLabelMenu extends Menu {
             windowDropDown.removeAllItems();
             glassDropDown.removeAllItems();
             performanceDropDown.removeAllItems();
-            CSVManager csvManager = CSVManager.getInstance();
 
             String selectedValue = (String) seriesDropDown.getSelectedItem();
             List<String> windowTypes = csvManager.getWindowType(selectedValue);
@@ -126,11 +127,11 @@ public class GenerateLabelMenu extends Menu {
         String windowType = (String) windowDropDown.getSelectedItem();
         String glassOption = (String) glassDropDown.getSelectedItem();
         String performanceWindow = (String) performanceDropDown.getSelectedItem();
-        String model = CSVManager.getInstance().getModelCode(series, windowType, glassOption);
-        List<Double> ratings = CSVManager.getInstance().getRatings(series, windowType, glassOption);
-        String report = CSVManager.getInstance().getReport(series, windowType, glassOption);
-        String performance = CSVManager.getInstance().getPerformanceRatings(series, performanceWindow);
-        boolean nrCan = CSVManager.getInstance().isNRCan(model);
+        String model = csvManager.getModelCode(series, windowType, glassOption);
+        List<Double> ratings = csvManager.getRatings(series, windowType, glassOption);
+        String report = csvManager.getReport(series, windowType, glassOption);
+        String performance = csvManager.getPerformanceRatings(series, performanceWindow);
+        boolean nrCan = csvManager.isNRCan(model);
 
         Label label = new Label(series + " " + windowType + "\n" + model + "\n" + report,
                 ratings.get(0), ratings.get(1), ratings.get(2), ratings.get(3), performance, nrCan);

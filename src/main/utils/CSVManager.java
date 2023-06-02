@@ -5,19 +5,25 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
+import jdk.nashorn.api.scripting.URLReader;
 
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.zip.ZipInputStream;
 
 public class CSVManager {
     private static CSVManager singleton = null;
     private static final char DELIMITER = ';';
-    private static final String PATH = "./data/thermalData.csv";
-    private static final String PERFORMANCE_PATH = "./data/performanceData.csv";
-    private static final String NRCAN_PATH = "./data/NRCanData.csv";
+    private static final String THERMAL_URL =
+            "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/thermalData.csv";
+    private static final String PERFORMANCE_URL =
+            "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/performanceData.csv";
+    private static final String NRCAN_URL =
+            "https://oee.nrcan.gc.ca/pml-lmp/index.cfm?action=app.download-telecharger&appliance=WINDOWS";
 
     private static List<String[]> records = new ArrayList<>();
     private static List<String[]> performanceRecords = new ArrayList<>();
@@ -27,14 +33,17 @@ public class CSVManager {
         CSVParser parser = new CSVParserBuilder().withSeparator(DELIMITER).build();
         CSVReader reader;
         try {
-            reader = new CSVReaderBuilder(new FileReader(PATH)).withCSVParser(parser).build();
+            reader = new CSVReaderBuilder(new URLReader(new URL(THERMAL_URL))).withCSVParser(parser).build();
             records = reader.readAll();
             reader.close();
-            reader = new CSVReaderBuilder(new FileReader(PERFORMANCE_PATH)).withCSVParser(parser).build();
+            reader = new CSVReaderBuilder(new URLReader(new URL(PERFORMANCE_URL))).withCSVParser(parser).build();
             performanceRecords = reader.readAll();
             reader.close();
+
+            ZipInputStream nrZip = new ZipInputStream(new URL(NRCAN_URL).openConnection().getInputStream());
+            nrZip.getNextEntry();
             parser = new CSVParserBuilder().withSeparator(',').build();
-            reader = new CSVReaderBuilder(new FileReader(NRCAN_PATH)).withCSVParser(parser).build();
+            reader = new CSVReaderBuilder(new InputStreamReader(nrZip)).withCSVParser(parser).build();
             nrCanRecords = reader.readAll();
             reader.close();
         } catch (IOException | CsvException e) {
@@ -141,7 +150,7 @@ public class CSVManager {
         boolean nrCan = false;
         String code = model.substring(model.indexOf('-')+1).toLowerCase();
         for (String[] record : nrCanRecords.subList(1, nrCanRecords.size())) {
-            if (record[0].toLowerCase().contains(code)) {
+            if (record[6].toLowerCase().contains(code)) {
                 nrCan = true;
                 break;
             }
