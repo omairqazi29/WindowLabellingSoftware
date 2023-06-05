@@ -3,13 +3,15 @@ package main.model;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 // Represents a label with all values and an image of it
 public class Label {
-    private static final String NRCAN_TEMPLATE = "./data/LabelTemplate.jpg";
-    private static final String OASIS_TEMPLATE = "./data/OasisTemplate.jpg";
+    private static final String NRCAN_TEMPLATE_URL =
+            "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/LabelTemplate.jpg";
+    private static final String OASIS_TEMPLATE_URL =
+            "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/OasisTemplate.jpg";
     private static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 70);
     private static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 40);
     private static final Font FONT_PERFORMANCE = new Font("Arial", Font.PLAIN, 35);
@@ -63,9 +65,9 @@ public class Label {
     public BufferedImage generateImage() throws IOException {
         BufferedImage template;
         if (nrCan) {
-            template = ImageIO.read(new File(NRCAN_TEMPLATE));
+            template = ImageIO.read(new URL(NRCAN_TEMPLATE_URL));
         } else {
-            template = ImageIO.read(new File(OASIS_TEMPLATE));
+            template = ImageIO.read(new URL(OASIS_TEMPLATE_URL));
         }
         BufferedImage label = new BufferedImage(template.getWidth(), template.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = label.createGraphics();
