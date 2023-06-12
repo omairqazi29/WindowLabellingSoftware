@@ -27,7 +27,7 @@ public class GenerateLabelMenu extends Menu {
     // EFFECTS: constructs a menu with generate label name;
     // throws IOException if error occurs in file operations
     public GenerateLabelMenu(JFrame parentFrame) throws IOException {
-        super("Generate Label");
+        super("Generate Label | " + parentFrame.getTitle());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(parentFrame.getWidth(), parentFrame.getHeight());
         setLocationRelativeTo(parentFrame);

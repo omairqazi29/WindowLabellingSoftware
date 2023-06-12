@@ -14,6 +14,7 @@ public class WindowLabellingSoftware extends JFrame implements ActionListener {
 
     // EFFECTS: constructs the UI and runs the app
     public WindowLabellingSoftware() {
+        super("Energy Label Generator | Oasis Windows");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
 
