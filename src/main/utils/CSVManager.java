@@ -1,4 +1,4 @@
-package main.utils;
+package utils;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -18,7 +18,7 @@ import java.util.zip.ZipInputStream;
 public class CSVManager {
     private static CSVManager singleton = null;
     private static final char DELIMITER = ';';
-    private static final String THERMAL_URL =
+    private static String THERMAL_URL =
             "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/thermalData.csv";
     private static final String PERFORMANCE_URL =
             "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/performanceData.csv";
@@ -51,12 +51,29 @@ public class CSVManager {
         }
     }
 
+    public static void testCSVManager() {
+        THERMAL_URL = "falseURL";
+        new CSVManager();
+    }
+
     // EFFECTS: creates a CSVManager
     public static CSVManager getInstance() {
         if (singleton == null) {
             singleton = new CSVManager();
         }
         return singleton;
+    }
+
+    public List<String[]> getRecords() {
+        return records;
+    }
+
+    public List<String[]> getPerformanceRecords() {
+        return performanceRecords;
+    }
+
+    public List<String[]> getNrCanRecords() {
+        return nrCanRecords;
     }
 
     public List<String> getWindowType(String forSeries) {

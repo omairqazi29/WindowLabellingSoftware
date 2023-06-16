@@ -1,4 +1,4 @@
-package main.model;
+package model;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -8,14 +8,14 @@ import java.net.URL;
 
 // Represents a label with all values and an image of it
 public class Label {
-    private static final String NRCAN_TEMPLATE_URL =
+    public static final String NRCAN_TEMPLATE_URL =
             "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/LabelTemplate.jpg";
-    private static final String OASIS_TEMPLATE_URL =
+    public static final String OASIS_TEMPLATE_URL =
             "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/OasisTemplate.jpg";
-    private static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 70);
-    private static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 40);
-    private static final Font FONT_PERFORMANCE = new Font("Arial", Font.PLAIN, 35);
-    private static final String PERFORMANCE = "AAMA/WDMA/CSA 101/I.S.2/CSA A440-11 NAFS\n";
+    public static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 70);
+    public static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 40);
+    public static final Font FONT_PERFORMANCE = new Font("Arial", Font.PLAIN, 35);
+    public static final String PERFORMANCE = "AAMA/WDMA/CSA 101/I.S.2/CSA A440-11 NAFS\n";
 
     private final String description;
     private final double uFactor;
@@ -60,11 +60,15 @@ public class Label {
         return performance;
     }
 
+    public boolean isNrCan() {
+        return nrCan;
+    }
+
     // EFFECTS: generates an image of the label with its details and returns it;
     // throws IOException if error occurs while handling file operations
     public BufferedImage generateImage() throws IOException {
         BufferedImage template;
-        if (nrCan) {
+        if (isNrCan()) {
             template = ImageIO.read(new URL(NRCAN_TEMPLATE_URL));
         } else {
             template = ImageIO.read(new URL(OASIS_TEMPLATE_URL));

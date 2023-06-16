@@ -1,7 +1,7 @@
-package main.ui.menu;
+package ui.menu;
 
-import main.model.Label;
-import main.utils.CSVManager;
+import model.Label;
+import utils.CSVManager;
 
 import javax.swing.*;
 import java.awt.*;

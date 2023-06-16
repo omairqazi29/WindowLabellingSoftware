@@ -1,4 +1,4 @@
-package main.ui.menu;
+package ui.menu;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;

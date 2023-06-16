@@ -1,6 +1,6 @@
-package main.ui;
+package ui;
 
-import main.ui.menu.GenerateLabelMenu;
+import ui.menu.GenerateLabelMenu;
 
 import javax.swing.*;
 import java.awt.*;
