@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipInputStream;
 
+// Represents a CSV manager for processing data in .csv files
 public class CSVManager {
     private static CSVManager singleton = null;
     private static final char DELIMITER = ';';
@@ -29,6 +30,7 @@ public class CSVManager {
     private static List<String[]> performanceRecords = new ArrayList<>();
     private static List<String[]> nrCanRecords = new ArrayList<>();
 
+    // EFFECTS: constructs a CSVManager and saves the thermal, performance and NRCan records
     private CSVManager() {
         CSVParser parser = new CSVParserBuilder().withSeparator(DELIMITER).build();
         CSVReader reader;
@@ -51,12 +53,14 @@ public class CSVManager {
         }
     }
 
+    // EFFECTS: tries to construct a CSVManager with false csv url
     public static void testCSVManager() {
         THERMAL_URL = "falseURL";
         new CSVManager();
     }
 
-    // EFFECTS: creates a CSVManager
+    // MODIFIES: this
+    // EFFECTS: returns the instance of CSVManager, or constructs a CSVManager if null and returns it
     public static CSVManager getInstance() {
         if (singleton == null) {
             singleton = new CSVManager();
@@ -76,6 +80,7 @@ public class CSVManager {
         return nrCanRecords;
     }
 
+    // EFFECTS: returns a list of window types for the given series
     public List<String> getWindowType(String forSeries) {
         List<String> windowTypes = new ArrayList<>();
         for (String[] record : records.subList(1, records.size())) {
@@ -88,6 +93,7 @@ public class CSVManager {
         return Collections.unmodifiableList(windowTypes);
     }
 
+    // EFFECTS: returns a list of performance window types for the given series
     public List<String> getPerformanceType(String forSeries) {
         List<String> performanceTypes = new ArrayList<>();
         for (String[] record : performanceRecords.subList(1, performanceRecords.size())) {
@@ -100,6 +106,7 @@ public class CSVManager {
         return Collections.unmodifiableList(performanceTypes);
     }
 
+    // EFFECTS: returns a list of glass options for the given series and window type
     public List<String> getGlassOption(String series, String window) {
         List<String> glassOptions = new ArrayList<>();
         for (String[] record : records.subList(1, records.size())) {
@@ -110,6 +117,7 @@ public class CSVManager {
         return Collections.unmodifiableList(glassOptions);
     }
 
+    // EFFECTS: returns a list of thermal ratings for the given series, window type and glass option
     public List<Double> getRatings(String series, String window, String glass) {
         List<Double> ratings = new ArrayList<>();
         for (String[] record : records.subList(1, records.size())) {
@@ -124,6 +132,7 @@ public class CSVManager {
         return ratings;
     }
 
+    // EFFECTS: returns the performance information for the given series and window type
     public String getPerformanceRatings(String series, String window) {
         String performance = "";
         for (String[] record : performanceRecords.subList(1, performanceRecords.size())) {
@@ -141,6 +150,7 @@ public class CSVManager {
         return performance;
     }
 
+    // EFFECTS: returns the model code for the given series, window type and glass option
     public String getModelCode(String series, String window, String glass) {
         String model = "";
         for (String[] record : records.subList(1, records.size())) {
@@ -152,6 +162,7 @@ public class CSVManager {
         return model;
     }
 
+    // EFFECTS: returns the test report information for the given series, window type and glass option
     public String getReport(String series, String window, String glass) {
         String report = "";
         for (String[] record : records.subList(1, records.size())) {
@@ -163,6 +174,7 @@ public class CSVManager {
         return report;
     }
 
+    // EFFECTS: returns true if given model is listed with NRCan, false otherwise
     public boolean isNRCan(String model) {
         boolean nrCan = false;
         String code = model.substring(model.indexOf('-')+1).toLowerCase();
