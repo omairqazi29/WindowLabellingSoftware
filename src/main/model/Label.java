@@ -9,9 +9,9 @@ import java.net.URL;
 // Represents a label with all values and an image of it
 public class Label {
     public static final String NRCAN_TEMPLATE_URL =
-            "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/LabelTemplate.jpg";
+            "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/LabelTemplate4x6.jpg";
     public static final String OASIS_TEMPLATE_URL =
-            "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/OasisTemplate.jpg";
+            "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/OasisTemplate4x6.jpg";
     public static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 65);
     public static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 40);
     public static final Font FONT_PERFORMANCE = new Font("Arial", Font.PLAIN, 35);
