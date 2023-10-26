@@ -12,7 +12,7 @@ public class Label {
             "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/LabelTemplate.jpg";
     public static final String OASIS_TEMPLATE_URL =
             "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/OasisTemplate.jpg";
-    public static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 70);
+    public static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 65);
     public static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 40);
     public static final Font FONT_PERFORMANCE = new Font("Arial", Font.PLAIN, 35);
     public static final String PERFORMANCE = "AAMA/WDMA/CSA 101/I.S.2/CSA A440-11 NAFS\n";
@@ -79,37 +79,38 @@ public class Label {
 
         g.setFont(FONT_VALUES);
         g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(Math.round((getUFactor() / 5.678) * 100.0) / 100.0), 300, 870);
-        g.drawString(String.valueOf(getUFactor()), 60, 870);
-        g.drawString(String.valueOf(getShgc()), 650, 870);
-        g.drawString(String.valueOf(getEr()), 190, 1020);
-        g.drawString(String.valueOf(getVt()), 650, 1020);
+        g.drawString(String.valueOf(Math.round((getUFactor() / 5.678) * 100.0) / 100.0), 420, 860);
+        g.drawString(String.valueOf(getUFactor()), 200, 860);
+        g.drawString(String.valueOf(getShgc()), 740, 860);
+        g.drawString(String.valueOf(getEr()), 310, 1000);
+        g.drawString(String.valueOf(getVt()), 740, 1000);
 
         g.setFont(FONT_DESCRIPTION);
-        int y = 1170;
+        int y = 1130;
         String[] lines = getDescription().split("\n");
         int totalHeight = lines.length * g.getFontMetrics().getHeight();
         int startY = y - (totalHeight / 2);
         for (String line : lines) {
             int lineWidth = g.getFontMetrics().stringWidth(line);
-            int x = (280 + (400 - lineWidth) / 2);
+            int x = (400 + (400 - lineWidth) / 2);
 
             g.drawString(line, x, startY);
             startY += g.getFontMetrics().getHeight();
         }
 
-        g.setFont(FONT_PERFORMANCE);
-        int performanceY = 1830;
-        String[] performance = getPerformance().split("\n");
-        int totalPerformanceHeight = performance.length * g.getFontMetrics().getHeight();
-        int startPerformanceY = performanceY - (totalPerformanceHeight / 2);
-        for (String line : performance) {
-            int lineWidth = g.getFontMetrics().stringWidth(line);
-            int x = (280 + (400 - lineWidth) / 2);
 
-            g.drawString(line, x, startPerformanceY);
-            startPerformanceY += g.getFontMetrics().getHeight();
-        }
+//        g.setFont(FONT_PERFORMANCE);
+//        int performanceY = 1830;
+//        String[] performance = getPerformance().split("\n");
+//        int totalPerformanceHeight = performance.length * g.getFontMetrics().getHeight();
+//        int startPerformanceY = performanceY - (totalPerformanceHeight / 2);
+//        for (String line : performance) {
+//            int lineWidth = g.getFontMetrics().stringWidth(line);
+//            int x = (280 + (400 - lineWidth) / 2);
+//
+//            g.drawString(line, x, startPerformanceY);
+//            startPerformanceY += g.getFontMetrics().getHeight();
+//        }
 
         g.dispose();
         return label;

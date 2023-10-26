@@ -151,7 +151,7 @@ public class GenerateLabelMenu extends Menu {
             double margin = 10;
 
             // Set paper size and imageable area accounting for margins
-            paper.setSize(paperWidth, paperHeight);
+            paper.setSize(4 * 72, 6 * 72);
             paper.setImageableArea(margin, margin, paperWidth - margin, paperHeight - 2*margin);
             pageFormat.setPaper(paper);
 
