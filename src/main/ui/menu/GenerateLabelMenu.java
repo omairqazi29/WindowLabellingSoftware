@@ -134,7 +134,7 @@ public class GenerateLabelMenu extends Menu {
         boolean nrCan = csvManager.isNRCan(model);
 
         Label label = new Label(series + " " + windowType + "\n" + model + "\n" + report,
-                ratings.get(0), ratings.get(1), ratings.get(2), ratings.get(3), performance, nrCan);
+                ratings.get(0), ratings.get(1), ratings.get(2).intValue(), ratings.get(3), performance, nrCan);
         try {
             PrinterJob printJob = PrinterJob.getPrinterJob();
 

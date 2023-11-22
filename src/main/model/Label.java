@@ -20,13 +20,13 @@ public class Label {
     private final String description;
     private final double uFactor;
     private final double shgc;
-    private final double er;
+    private final int er;
     private final double vt;
     private final String performance;
     private final boolean nrCan;
 
     // EFFECTS: Constructs a label with the given details and assigns its image to it
-    public Label(String desc, double uVal, double shgc, double er, double vt, String perf, boolean nrCan) {
+    public Label(String desc, double uVal, double shgc, int er, double vt, String perf, boolean nrCan) {
         this.description = desc;
         this.uFactor = uVal;
         this.shgc = shgc;
@@ -48,7 +48,7 @@ public class Label {
         return shgc;
     }
 
-    public double getEr() {
+    public int getEr() {
         return er;
     }
 
@@ -82,7 +82,7 @@ public class Label {
         g.drawString(String.valueOf(Math.round((getUFactor() / 5.678) * 100.0) / 100.0), 420, 860);
         g.drawString(String.valueOf(getUFactor()), 200, 860);
         g.drawString(String.valueOf(getShgc()), 740, 860);
-        g.drawString(String.valueOf(getEr()), 310, 1000);
+        g.drawString(String.valueOf(getEr()), 340, 1000);
         g.drawString(String.valueOf(getVt()), 740, 1000);
 
         g.setFont(FONT_DESCRIPTION);

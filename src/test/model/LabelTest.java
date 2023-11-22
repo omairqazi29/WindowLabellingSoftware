@@ -13,8 +13,8 @@ public class LabelTest {
 
     @BeforeEach
     void runBefore() {
-        testNrLabel = new Label("nrCan", 0.1, 0.2, 0.3, 0.4, "pTest", true);
-        testOasisLabel = new Label("oasis", 0.1, 0.2, 0.3, 0.4, "pTest", false);
+        testNrLabel = new Label("nrCan", 0.1, 0.2, 3, 0.4, "pTest", true);
+        testOasisLabel = new Label("oasis", 0.1, 0.2, 3, 0.4, "pTest", false);
     }
 
     @Test
@@ -22,7 +22,7 @@ public class LabelTest {
         assertEquals("nrCan", testNrLabel.getDescription());
         assertEquals(0.1, testNrLabel.getUFactor());
         assertEquals(0.2, testNrLabel.getShgc());
-        assertEquals(0.3, testNrLabel.getEr());
+        assertEquals(3, testNrLabel.getEr());
         assertEquals(0.4, testNrLabel.getVt());
         assertEquals(Label.PERFORMANCE + "pTest", testNrLabel.getPerformance());
         assertTrue(testNrLabel.isNrCan());
