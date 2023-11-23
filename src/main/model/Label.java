@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 
 // Represents a label with all values and an image of it
 public class Label {
@@ -52,8 +53,9 @@ public class Label {
         return er;
     }
 
-    public double getVt() {
-        return vt;
+    public String getVt() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format(vt);
     }
 
     public String getPerformance() {
@@ -83,10 +85,10 @@ public class Label {
         g.drawString(String.valueOf(getUFactor()), 200, 860);
         g.drawString(String.valueOf(getShgc()), 740, 860);
         g.drawString(String.valueOf(getEr()), 340, 1000);
-        g.drawString(String.valueOf(getVt()), 740, 1000);
+        g.drawString(getVt(), 740, 1000);
 
         g.setFont(FONT_DESCRIPTION);
-        int y = 1130;
+        int y = 1160;
         String[] lines = getDescription().split("\n");
         int totalHeight = lines.length * g.getFontMetrics().getHeight();
         int startY = y - (totalHeight / 2);
