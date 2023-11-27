@@ -126,7 +126,6 @@ public class GenerateLabelMenu extends Menu {
         String series = (String) seriesDropDown.getSelectedItem();
         String windowType = (String) windowDropDown.getSelectedItem();
         String glassOption = (String) glassDropDown.getSelectedItem();
-        String glazingType = csvManager.getGlazingType(glassOption);
         String performanceWindow = (String) performanceDropDown.getSelectedItem();
         String model = csvManager.getModelCode(series, windowType, glassOption);
         List<Double> ratings = csvManager.getRatings(series, windowType, glassOption);
@@ -134,7 +133,7 @@ public class GenerateLabelMenu extends Menu {
         String performance = csvManager.getPerformanceRatings(series, performanceWindow);
         boolean nrCan = csvManager.isNRCan(model);
 
-        Label label = new Label(series + " " + windowType + "\n" + glazingType + "\n" + model + "\n" + report,
+        Label label = new Label(series + " " + windowType + "\n" + model + "\n" + report,
                 ratings.get(0), ratings.get(1), ratings.get(2).intValue(), ratings.get(3), performance, nrCan);
         try {
             PrinterJob printJob = PrinterJob.getPrinterJob();
