@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 
 // Represents a label with all values and an image of it
 public class Label {
@@ -12,8 +13,8 @@ public class Label {
             "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/LabelTemplate4x6.jpg";
     public static final String OASIS_TEMPLATE_URL =
             "https://raw.githubusercontent.com/omairqazi29/WindowLabellingSoftware/main/data/OasisTemplate4x6.jpg";
-    public static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 65);
-    public static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 40);
+    public static final Font FONT_VALUES = new Font("Arial", Font.BOLD, 95);
+    public static final Font FONT_DESCRIPTION = new Font("Arial", Font.PLAIN, 50);
     public static final Font FONT_PERFORMANCE = new Font("Arial", Font.PLAIN, 35);
     public static final String PERFORMANCE = "AAMA/WDMA/CSA 101/I.S.2/CSA A440-11 NAFS\n";
 
@@ -52,8 +53,9 @@ public class Label {
         return er;
     }
 
-    public double getVt() {
-        return vt;
+    public String getVt() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format(vt);
     }
 
     public String getPerformance() {
@@ -79,14 +81,14 @@ public class Label {
 
         g.setFont(FONT_VALUES);
         g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(Math.round((getUFactor() / 5.678) * 100.0) / 100.0), 420, 860);
-        g.drawString(String.valueOf(getUFactor()), 200, 860);
-        g.drawString(String.valueOf(getShgc()), 740, 860);
-        g.drawString(String.valueOf(getEr()), 340, 1000);
-        g.drawString(String.valueOf(getVt()), 740, 1000);
+        g.drawString(String.valueOf(Math.round((getUFactor() / 5.678) * 100.0) / 100.0), 370, 1000);
+        g.drawString(String.valueOf(getUFactor()), 80, 1000);
+        g.drawString(String.valueOf(getShgc()), 765, 1000);
+        g.drawString(String.valueOf(getEr()), 250, 1170);
+        g.drawString(getVt(), 765, 1170);
 
         g.setFont(FONT_DESCRIPTION);
-        int y = 1130;
+        int y = 1370;
         String[] lines = getDescription().split("\n");
         int totalHeight = lines.length * g.getFontMetrics().getHeight();
         int startY = y - (totalHeight / 2);

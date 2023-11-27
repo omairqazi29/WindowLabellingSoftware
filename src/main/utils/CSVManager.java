@@ -164,14 +164,16 @@ public class CSVManager {
 
     // EFFECTS: returns the test report information for the given series, window type and glass option
     public String getReport(String series, String window, String glass) {
-        String report = "";
-        for (String[] record : records.subList(1, records.size())) {
-            if (record[0].equals(series) && record[1].equals(window) && record[2].equals(glass)) {
-                report = record[8];
-                break;
-            }
-        }
-        return report;
+//        String report = "";
+//        for (String[] record : records.subList(1, records.size())) {
+//            if (record[0].equals(series) && record[1].equals(window) && record[2].equals(glass)) {
+//                report = record[8];
+//                break;
+//            }
+//        }
+//        return report;
+
+        return "W410-1 (Surrey, BC)";
     }
 
     // EFFECTS: returns true if given model is listed with NRCan, false otherwise
@@ -185,5 +187,19 @@ public class CSVManager {
             }
         }
         return nrCan;
+    }
+
+    public String getGlazingType(String glass) {
+        int count = 0;
+        for (int i = 0; i < glass.length(); i++) {
+            if (glass.charAt(i) == '-') {
+                count++;
+            }
+        }
+
+        if (count == 1) {
+            return "Vinyl frame, double glazed, low-e coating";
+        }
+        return "Vinyl frame, triple glazed, low-e coating";
     }
 }
