@@ -144,8 +144,8 @@ public class GenerateLabelMenu extends Menu {
 
             // Adjust paper size to image size
             BufferedImage image = label.generateImage();
-            double paperWidth = 4 * 72;
-            double paperHeight = 6 * 72;
+            double paperWidth = image.getWidth();
+            double paperHeight = image.getHeight();
 
             // Create a margin (in points)
             double margin = 0;
