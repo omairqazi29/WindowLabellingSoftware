@@ -72,8 +72,10 @@ public class Label {
         BufferedImage template;
         if (isNrCan()) {
             template = ImageIO.read(new URL(NRCAN_TEMPLATE_URL));
+            //template = ImageIO.read(new File("data/LabelTemplate4x6.jpg"));
         } else {
             template = ImageIO.read(new URL(OASIS_TEMPLATE_URL));
+            //template = ImageIO.read(new File("data/OasisTemplate4x6.jpg"));
         }
         BufferedImage label = new BufferedImage(template.getWidth(), template.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = label.createGraphics();
