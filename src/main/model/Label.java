@@ -145,6 +145,9 @@ public class Label {
 
             if (i < 3) {
                 x = (width - lineWidth) / 2;
+            } else if (i == 3) {
+                x = (width - lineWidth) / 2 + 150;
+                performanceY += 100;
             } else {
                 x = (width - lineWidth) / 2 + 150;
             }
