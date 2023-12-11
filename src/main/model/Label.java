@@ -121,10 +121,9 @@ public class Label {
     }
 
     public BufferedImage generatePerformanceLabel() throws IOException {
-        // Assuming 300 DPI for a 4x2 inches label
         int dpi = 300;
-        int width = 4 * dpi; // 4 inches wide
-        int height = 2 * dpi; // 2 inches tall
+        int width = 4 * dpi;
+        int height = 2 * dpi;
 
         BufferedImage template = ImageIO.read(new URL(NAFS_TEMPLATE_URL));
         BufferedImage label = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -134,9 +133,8 @@ public class Label {
         g.setFont(FONT_PERFORMANCE);
         g.setColor(Color.BLACK);
 
-        // Draw the performance text
-        int performanceY = 90; // Y-coordinate for the first line of text
-        String[] performance = getPerformance().split("\n"); // getPerformance() should return the performance text
+        int performanceY = 90;
+        String[] performance = getPerformance().split("\n");
 
         for (int i = 0; i < performance.length; i++) {
             String line = performance[i];

@@ -189,9 +189,8 @@ public class GenerateLabelMenu extends Menu {
         String performance = csvManager.getPerformanceRatings(series, performanceWindow);
         boolean nrCan = csvManager.isNRCan(model);
 
-        Label label = new Label(series + " " + windowType + "\n" + glazingType + "\n" + model + "\n" + report,
+        return new Label(series + " " + windowType + "\n" + glazingType + "\n" + model + "\n" + report,
                 ratings.get(0), ratings.get(1), ratings.get(2).intValue(), ratings.get(3), performance, nrCan);
-        return label;
     }
 
     private void printPerformance(BufferedImage image) {
@@ -203,10 +202,9 @@ public class GenerateLabelMenu extends Menu {
             Graphics2D g2d = (Graphics2D) graphics;
             g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 
-            // Scale the image to fit the page
             double scaleX = pageFormat.getImageableWidth() / image.getWidth();
             double scaleY = pageFormat.getImageableHeight() / image.getHeight();
-            double scale = Math.min(scaleX, scaleY); // maintain aspect ratio
+            double scale = Math.min(scaleX, scaleY);
 
             int scaledWidth = (int) (image.getWidth() * scale);
             int scaledHeight = (int) (image.getHeight() * scale);
