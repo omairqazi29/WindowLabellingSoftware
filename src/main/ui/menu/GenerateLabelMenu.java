@@ -74,6 +74,7 @@ public class GenerateLabelMenu extends Menu {
         JLabel glassLabel = new JLabel("Glass Option:");
         JLabel performanceLabel = new JLabel("Performance for Window: ");
         JButton generateButton = createButton("Generate Label", "genLabel");
+        JButton generatePerformanceButton = createButton("Generate Performance Label", "genPerform");
         JButton backButton = createButton("Back", "back");
 
         // Create layout and add components to main panel
@@ -107,6 +108,8 @@ public class GenerateLabelMenu extends Menu {
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(generateButton, gbc);
         gbc.gridx++;
+        mainPanel.add(generatePerformanceButton, gbc);
+        gbc.gridx++;
         mainPanel.add(backButton, gbc);
 
         return mainPanel;
@@ -123,19 +126,7 @@ public class GenerateLabelMenu extends Menu {
     // EFFECTS: asks details and generates the image of the label accordingly and returns it;
     // throws IOException if error occurs while reading or writing image
     private void runMenu() throws IOException {
-        String series = (String) seriesDropDown.getSelectedItem();
-        String windowType = (String) windowDropDown.getSelectedItem();
-        String glassOption = (String) glassDropDown.getSelectedItem();
-        String glazingType = csvManager.getGlazingType(glassOption);
-        String performanceWindow = (String) performanceDropDown.getSelectedItem();
-        String model = csvManager.getModelCode(series, windowType, glassOption);
-        List<Double> ratings = csvManager.getRatings(series, windowType, glassOption);
-        String report = csvManager.getReport(series, windowType, glassOption);
-        String performance = csvManager.getPerformanceRatings(series, performanceWindow);
-        boolean nrCan = csvManager.isNRCan(model);
-
-        Label label = new Label(series + " " + windowType + "\n" + glazingType + "\n" + model + "\n" + report,
-                ratings.get(0), ratings.get(1), ratings.get(2).intValue(), ratings.get(3), performance, nrCan);
+        Label label = getLabel();
         try {
             PrinterJob printJob = PrinterJob.getPrinterJob();
 
@@ -186,11 +177,65 @@ public class GenerateLabelMenu extends Menu {
 
     }
 
+    private Label getLabel() {
+        String series = (String) seriesDropDown.getSelectedItem();
+        String windowType = (String) windowDropDown.getSelectedItem();
+        String glassOption = (String) glassDropDown.getSelectedItem();
+        String glazingType = csvManager.getGlazingType(glassOption);
+        String performanceWindow = (String) performanceDropDown.getSelectedItem();
+        String model = csvManager.getModelCode(series, windowType, glassOption);
+        List<Double> ratings = csvManager.getRatings(series, windowType, glassOption);
+        String report = csvManager.getReport(series, windowType, glassOption);
+        String performance = csvManager.getPerformanceRatings(series, performanceWindow);
+        boolean nrCan = csvManager.isNRCan(model);
+
+        Label label = new Label(series + " " + windowType + "\n" + glazingType + "\n" + model + "\n" + report,
+                ratings.get(0), ratings.get(1), ratings.get(2).intValue(), ratings.get(3), performance, nrCan);
+        return label;
+    }
+
+    private void printPerformance(BufferedImage image) {
+        PrinterJob printJob = PrinterJob.getPrinterJob();
+        printJob.setPrintable((graphics, pageFormat, pageIndex) -> {
+            if (pageIndex != 0) {
+                return Printable.NO_SUCH_PAGE;
+            }
+            Graphics2D g2d = (Graphics2D) graphics;
+            g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+
+            // Scale the image to fit the page
+            double scaleX = pageFormat.getImageableWidth() / image.getWidth();
+            double scaleY = pageFormat.getImageableHeight() / image.getHeight();
+            double scale = Math.min(scaleX, scaleY); // maintain aspect ratio
+
+            int scaledWidth = (int) (image.getWidth() * scale);
+            int scaledHeight = (int) (image.getHeight() * scale);
+
+            g2d.drawImage(image, 0, 0, scaledWidth, scaledHeight, null);
+            return Printable.PAGE_EXISTS;
+        });
+
+        if (printJob.printDialog()) {
+            try {
+                printJob.print();
+            } catch (PrinterException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if ("genLabel".equals(e.getActionCommand())) {
             try {
                 runMenu();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        } else if ("genPerform".equals(e.getActionCommand())) {
+            try {
+                BufferedImage img = getLabel().generatePerformanceLabel();
+                printPerformance(img);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

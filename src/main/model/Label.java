@@ -3,6 +3,7 @@ package model;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -115,6 +116,53 @@ public class Label {
 //        }
 
         g.dispose();
+        return label;
+    }
+
+    public BufferedImage generatePerformanceLabel() throws IOException {
+        // Assuming a resolution of 300 DPI for a 4x2 inch label
+        int dpi = 300;
+        int width = 4 * dpi; // 4 inches wide
+        int height = 2 * dpi; // 2 inches tall
+
+        // Create a new image for the label
+        BufferedImage label = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = label.createGraphics();
+
+        // Set background color to white
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, width, height);
+
+        // Draw the blue rectangle
+        g.setColor(new Color(0, 0, 255)); // Standard blue, adjust the RGB values as needed for the right shade
+        g.fillRect(0, 0, width, (int) (height * 0.2)); // The rectangle's height is 20% of the total label height
+
+        // Set the font and color for the text
+        g.setFont(FONT_PERFORMANCE);
+        g.setColor(Color.BLACK);
+
+        // Draw the logo, scaled if necessary
+        BufferedImage logo = ImageIO.read(new File("/data/qai.png"));
+        int logoWidth = (int) (width * 0.15); // Logo width is 15% of the total label width
+        int logoHeight = (int) (height * 0.2); // Logo height is the same as the blue rectangle's height
+        g.drawImage(logo, 10, 10, logoWidth, logoHeight, null); // Adjust position as needed
+
+        g.drawString("AAMA/WDMA/CSA 101/I.S.2/A440-11 NAFS", 120, 30);
+        int performanceY = 50;
+        String[] performance = getPerformance().split("\n");
+        int totalPerformanceHeight = performance.length * g.getFontMetrics().getHeight();
+        int startPerformanceY = performanceY - (totalPerformanceHeight / 2);
+        for (String line : performance) {
+            int lineWidth = g.getFontMetrics().stringWidth(line);
+            int x = (280 + (400 - lineWidth) / 2);
+
+            g.drawString(line, x, startPerformanceY);
+            startPerformanceY += g.getFontMetrics().getHeight();
+        }
+
+        // Dispose of the graphics to finalize the drawing
+        g.dispose();
+
         return label;
     }
 }
